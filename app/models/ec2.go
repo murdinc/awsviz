@@ -17,3 +17,14 @@ type    Instance                struct {
 	KeyName                 string
 	AvailZone               string
 }
+
+type	Node			struct {
+	Name			string `json:"name"`
+	Class			string `json:"class"`
+	Region                  string `json:"region"`
+}
+
+type	Arbor			struct {
+	Nodes			map[string]Node `json:"nodes"`
+	Edges                   map[string]string `json:"edges"`
+}

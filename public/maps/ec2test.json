@@ -1,0 +1,164 @@
+{       
+	"nodes": {
+		"php3": {
+			"region": "us-west-2a"
+		},
+		"julep2": {
+			"region": "us-west-2a"
+		},
+		"php2": {
+			"region": "us-west-2a"
+		},
+		"mysql-read1": {
+			"region": "us-west-2a"
+		},
+		"julep1": {
+			"region": "us-west-2a"
+		},
+		"mysql-read10": {
+			"region": "us-west-2a"
+		},
+		"php1": {
+			"region": "us-east-1a"
+		},
+		"julep3": {
+			"region": "us-east-1a"
+		},
+		"julep4": {
+			"region": "us-east-1a"
+		},
+                "julep5": {
+                        "region": "eu-west-1a"
+                },
+		"julep10": {
+			"region": "us-east-1a"
+		},
+		"mysql-master2": {
+			"region": "us-east-1a"
+		},
+		"php5": {
+			"region": "us-east-1a"
+		},
+		"php4": {
+			"region": "us-east-1a"
+		},
+		"mysql-read2": {
+			"region": "us-east-1a"
+		},
+		"mysql-read3": {
+			"region": "eu-west-1a"
+		},
+		"julep6": {
+			"region": "eu-west-1a"
+		},
+                "OREGON": {
+                        "region": "us-west-2a"
+                },
+                "VIRGINIA": {
+                        "region": "us-east-1a"
+                },
+                "IRELAND": {
+                        "region": "eu-west-1a"
+                },
+                "PHP Ireland": {
+                        "region": "eu-west-1a"
+                },
+                "PHP Oregon": {
+                        "region": "us-west-2a"
+                },
+                "PHP Virginia": {
+                        "region": "us-east-1a"
+                },
+
+
+                "Mysql Ireland": {
+                        "region": "eu-west-1a"
+                },
+                "Mysql Oregon": {
+                        "region": "us-west-2a"
+                },
+                "Mysql Virginia": {
+                        "region": "us-east-1a"
+                },
+
+                "Julep Ireland": {
+                        "region": "eu-west-1a"
+                },
+                "Julep Oregon": {
+                        "region": "us-west-2a"
+                },
+                "Julep Virginia": {
+                        "region": "us-east-1a"
+                },
+
+		"php6": {
+			"region": "eu-west-1a"
+		}
+	},
+		"edges": {
+                        "PHP Oregon": {
+                                "php2": {},
+                                "php3": {}
+                        },
+                        "PHP Virginia": {
+                                "php4": {},
+                                "php1": {},
+                                "php5": {}
+                        },
+                        "PHP Ireland": {
+                                "php6": {}
+                        },
+
+
+
+                        "Mysql Oregon": {
+                                "mysql-read10": {},
+                                "mysql-read1": {}
+                        },
+                        "Mysql Virginia": {
+                                "mysql-read2": {},
+                                "mysql-master2": {}
+                        },
+                        "Mysql Ireland": {
+                                "mysql-read3": {}
+                        },
+
+
+                        "Julep Oregon": {
+                                "julep1": {},
+				"julep2": {}
+                        },
+                        "Julep Virginia": {
+                                "julep3": {},
+                                "julep4": {},
+				"julep10": {}
+                        },
+                        "Julep Ireland": {
+                                "julep5": {},
+                                "julep6": {}
+                        },
+
+
+			"OREGON": {
+				"PHP Oregon": {},
+                                "Mysql Oregon": {},
+                                "Julep Oregon": {},
+                                "VIRGINIA": {},
+                                "IRELAND": {}
+			},
+			"VIRGINIA": {
+                                "PHP Virginia": {},
+                                "Julep Virginia": {},
+                                "Mysql Virginia": {},
+                                "OREGON": {},
+                                "IRELAND": {}
+			},
+                        "IRELAND": {
+                                "PHP Ireland": {},
+                                "Julep Ireland": {},
+                                "Mysql Ireland": {},
+                                "OREGON": {},
+                                "VIRGINIA": {}
+                        }
+		}
+}

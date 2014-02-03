@@ -8,35 +8,43 @@ import (
 	"time"
 )
 
-func ListInstances() []models.Instance {
+func ListInstances() models.Arbor {
 
-	var instances []models.Instance
+	var arbor models.Arbor
+
+	nodes := map[string]models.Node{}
 
 	results := asyncApiCalls()
+	//	   asyncApiCalls()
 	for _, result := range results {
 
 		for _,res := range result.Reservations {
 			for _,instance := range res.Instances {
 
+				var name, class string
+				for _,tag := range instance.Tags {
+					if tag.Key == "Name" {
+						name = tag.Value
+					}
+					if tag.Key == "Class" {
+						class = tag.Value
+					}
+				}
+
 				revel.INFO.Printf("Instance: %s", instance.InstanceId)
-				instances = append(instances,models.Instance{
-					Name:"", //TODO
-					InstanceId:             instance.InstanceId,
-					PrivateIPAddress:       instance.PrivateIPAddress,
-					PublicIPAddress:        instance.IPAddress,
-					VpcId:                  instance.VpcId,
-					SubnetId:               instance.SubnetId,
-					ImageId:                instance.ImageId,
-					RootDeviceType:         instance.RootDeviceType,
-					InstanceType:           instance.InstanceType,
-					State:                  instance.State.Name,
-					KeyName:                instance.KeyName,
-					AvailZone:              instance.AvailZone,
-				})
+				nodes[instance.InstanceId] = models.Node{
+					Name:           name,
+					Class:		class,
+					Region:		instance.AvailZone,
+				}
 			}
 		}
 	}
-	return instances
+
+
+	arbor.Nodes = nodes
+
+	return arbor
 }
 
 func asyncApiCalls() []ec2.InstancesResp {

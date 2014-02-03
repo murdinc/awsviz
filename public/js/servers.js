@@ -70,7 +70,7 @@
           // determine the box size and round off the coords if we'll be 
           // drawing a text label (awful alignment jitter otherwise...)
           var w = ctx.measureText(node.data.label||"").width + 6
-          var label = node.data.label
+          var label = node.data.name
           if (!(label||"").match(/^[ \t]*$/)){
             pt.x = Math.floor(pt.x)
             pt.y = Math.floor(pt.y)
@@ -92,11 +92,9 @@
             ctx.font = "bold 11px Arial"
             ctx.textAlign = "center"
             
-            // if (node.data.region) ctx.fillStyle = palette[node.data.region]
-            // else ctx.fillStyle = "#888888"
-            ctx.fillStyle = "#888888"
+            if (node.data.region) ctx.fillStyle = palette[node.data.region]
+            else ctx.fillStyle = "#888888"
 
-            // ctx.fillText(label||"", pt.x, pt.y+4)
             ctx.fillText(label||"", pt.x, pt.y+4)
           }
         })    		
@@ -174,7 +172,7 @@
     }
 
     var _maps = {
-      ec2servers:{title:"ec2 servers", p:{stiffness:400}, source:_sources.ec2servers}
+      everything:{title:"everything", p:{stiffness:400}, source:_sources.everything}
     }
     
     var that = {
@@ -184,7 +182,7 @@
           _links.append("<li><a href='#/"+stub+"' class='"+stub+"'>"+map.title+"</a></li>")
         })
         _links.find('li > a').click(that.mapClick)
-        _links.find('.ec2servers').click()
+        _links.find('.everything').click()
         return that
       },
       mapClick:function(e){
@@ -196,7 +194,7 @@
         return false
       },
       selectMap:function(map_id){
-        $.getJSON("/public/maps/"+map_id+".json",function(data){
+        $.getJSON("/api/"+map_id+".json",function(data){
           // load the raw data into the particle system as is (since it's already formatted correctly for .merge)
           var nodes = data.nodes
           $.each(nodes, function(name, info){

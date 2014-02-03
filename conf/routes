@@ -5,7 +5,8 @@
 module:testrunner
 
 GET     /                                       App.Index
-GET	/api/prod				Api.Prod
+GET     /api/everything.json                    Api.Everything
+GET	/api/prod.json				Api.Prod
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
