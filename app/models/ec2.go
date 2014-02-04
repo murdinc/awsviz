@@ -26,5 +26,7 @@ type	Node			struct {
 
 type	Arbor			struct {
 	Nodes			map[string]Node `json:"nodes"`
-	Edges                   map[string]string `json:"edges"`
+	Edges                   map[string]map[string][]string `json:"edges"`
+	Regions			[]string `json:"regions"`
+	Classes			map[string][]string `json:"classes"`
 }
