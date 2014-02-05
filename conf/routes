@@ -5,6 +5,7 @@
 module:testrunner
 
 GET     /                                       App.Index
+GET     /one                                    App.One
 GET     /api/everything.json                    Api.Everything
 GET	/api/prod.json				Api.Prod
 

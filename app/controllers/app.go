@@ -9,3 +9,7 @@ type App struct {
 func (c App) Index() revel.Result {
 	return c.Render()
 }
+
+func (c App) One() revel.Result {
+	return c.Render()
+}

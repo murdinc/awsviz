@@ -30,3 +30,19 @@ type	Arbor			struct {
 	Regions			[]string `json:"regions"`
 	Classes			map[string][]string `json:"classes"`
 }
+
+
+type	Flare		struct {
+        Name            string          `json:"name"`
+	Children	[]Child		`json:"children"`
+	Class           string          `json:"class"`
+	AvailZone       string          `json:"availZone"`
+}
+
+type	Child		struct {
+        Name            string          `json:"name"`
+	InstanceType    string          `json:"instanceType"`
+	Children	[]Child		`json:"children"`
+	Class		string		`json:"class"`
+	AvailZone	string		`json:"availZone"`
+}

@@ -8,127 +8,71 @@ import (
 	"time"
 )
 
-func ListInstances() models.Arbor {
+func ListInstances() models.Flare {
 
-	var arbor models.Arbor
+	var flare models.Flare
+	flare.Name = "Everything"
 
-	nodes := map[string]models.Node{}
-	//groups := map[string]map[string][]string{}
-	regions := []string{}
-	classes := map[string][]string{}
-	edges := map[string]map[string][]string{}
+	temp := make(map[string]map[string][]models.Child)
 
+	// Build the instances into their placeholder
 	results := asyncApiCalls()
 	for _, result := range results {
 
-		if ( result.Reservations != nil ) {
-			//revel.INFO.Printf("Region with instances: %s", result)
-		}
+		// classes placeholder
+		classes := make(map[string][]models.Child)
+		var availZone string
 
 		for _,res := range result.Reservations {
 			for _,instance := range res.Instances {
 
-				// Build our region "nodes" when we come across one we haven't seen before.
-				if _,ok := nodes[instance.AvailZone]; ok {
-					//revel.INFO.Printf("Region node already found: %s", instance.AvailZone)
-				} else {
-					nodes[instance.AvailZone] = models.Node{
-						Name:		instance.AvailZone,
-						Class:          "Availability Zone",
-						Region:         instance.AvailZone,
-					}
-					// Add region to our regions
-					regions = append(regions, instance.AvailZone)
-				}
+				var instName string
+				var instClass string
 
-				var name, class string
 				for _,tag := range instance.Tags {
 					if tag.Key == "Name" {
-						name = tag.Value
+						instName = tag.Value
 					}
 					if tag.Key == "Class" {
-						class = tag.Value
+						instClass = tag.Value
 					}
 				}
 
-				// Add the instance to our nodes
-				nodes[instance.InstanceId] = models.Node{
-					Name:           name,
-					Class:		class,
-					Region:		instance.AvailZone,
-				}
+				var inst models.Child
+				inst.Name = instName
+				inst.Class = instClass
+				inst.AvailZone = instance.AvailZone
+				inst.InstanceType = instance.InstanceType
 
-				// Build our class "nodes" when we come across one we haven't seen before.
-				nodename := class + "." + instance.AvailZone
-				if _,ok := nodes[nodename]; ok {
-					//revel.INFO.Printf("CLASS FOUND: %s", class)                                                                                           
-				} else {
-					nodes[nodename] = models.Node{
-						Name:           class,
-						Class:          "Class",
-						Region:         instance.AvailZone,
-					}
+				classes[instClass] =  append(classes[instClass], inst)
+				availZone = instance.AvailZone
 
-				}
-				// Add classes to our groups
-				classes[instance.AvailZone] = append(classes[instance.AvailZone], class)
 
 			}
+			temp[availZone] = classes
 		}
 	}
 
-	// Build our edges for regions and classes
-	for _,region := range regions {
-		revel.INFO.Printf("Building region: %s", region)
-		tempedge := map[string][]string{}
+	// Combine everything in the correct order
+	for tempRegion,tempClasses := range temp {
+		var regionChild models.Child
+		regionChild.Name = tempRegion
 
-		// Connect our regions together
-		for _,targetregion := range regions {
-			if targetregion != region {
-				tempedge[targetregion] = nil
+		for tempClass,tempInstances := range tempClasses {
+			var classChild models.Child
+			classChild.Name = tempClass
+			for _, child := range tempInstances {
+
+				classChild.Children = append(classChild.Children, child)
+
 			}
+			regionChild.Children = append(regionChild.Children, classChild)
 		}
+		flare.Children = append(flare.Children, regionChild)
 
-		// Connect our classes to their regions
-		for classregion,classlist := range classes {
-			if classregion == region {
-				for _,regionclass := range classlist {
-					edgename := regionclass + "." + region
-					tempedge[edgename] = nil
-				}
-			}
-		}
-
-		edges[region] = tempedge
 	}
 
-
-	// Build our edges for instances
-	for classregion, classlist := range classes {
-		for _,regionclass := range classlist {
-
-			revel.INFO.Printf("Building class: %s in: %s", classregion, regionclass)
-			edgename := regionclass + "." + classregion
-			tempedge := map[string][]string{}
-			for nodename,val := range nodes {
-				if (val.Class == regionclass && val.Region == classregion) {
-					//tempedge := map[string][]string{}
-					revel.INFO.Printf("Found class: %s and including: %s", regionclass, nodename)
-					tempedge[nodename] = nil
-				//	edges[edgename] = tempedge
-				}
-				edges[edgename] = tempedge
-
-			}
-		}
-	}
-
-	arbor.Nodes = nodes
-	arbor.Regions = regions
-	arbor.Classes = classes
-	arbor.Edges = edges
-
-	return arbor
+	return flare
 }
 
 func asyncApiCalls() []ec2.InstancesResp {
