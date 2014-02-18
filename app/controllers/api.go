@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/robfig/revel"
-	"awsgraph/app/controllers/aws"
+	"awsviz/app/controllers/aws"
 )
 
 type Api struct {

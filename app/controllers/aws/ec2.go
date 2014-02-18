@@ -4,7 +4,7 @@ import (
 	"github.com/robfig/revel"
 	"github.com/ahmad972/goamz/aws"
 	"github.com/ahmad972/goamz/ec2"
-	"awsgraph/app/models"
+	"awsviz/app/models"
 	"time"
 )
 
